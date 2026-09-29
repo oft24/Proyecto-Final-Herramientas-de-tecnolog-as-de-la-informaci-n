@@ -43,6 +43,7 @@ def init_schema() -> None:
             );
             CREATE TABLE IF NOT EXISTS orders (
                 id UUID PRIMARY KEY,
+                public_order_id TEXT UNIQUE,
                 user_id BIGINT REFERENCES users(id),
                 customer_name TEXT NOT NULL,
                 customer_email TEXT,
@@ -62,6 +63,12 @@ def init_schema() -> None:
                 unit_price NUMERIC(12, 2) NOT NULL
             );
             """
+        )
+        # Existing Avance 2 databases predate the public order identifier.
+        conn.execute("ALTER TABLE orders ADD COLUMN IF NOT EXISTS public_order_id TEXT")
+        conn.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS orders_public_order_id_key "
+            "ON orders (public_order_id)"
         )
 
 
@@ -115,17 +122,18 @@ def create_order(
     total: str,
     items: list[dict],
     s3_key: str | None,
+    public_order_id: str | None = None,
 ) -> None:
     with connection() as conn:
         # Insert the order header
         conn.execute(
             """
             INSERT INTO orders (
-                id, user_id, customer_name, customer_email, subtotal,
+                id, public_order_id, user_id, customer_name, customer_email, subtotal,
                 shipping, total, status, s3_key
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, 'created', %s)
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'created', %s)
             """,
-            (order_id, user_id, customer_name, customer_email,
+            (order_id, public_order_id, user_id, customer_name, customer_email,
              subtotal, shipping, total, s3_key),
         )
         # Insert order items using an explicit cursor (psycopg3: executemany
@@ -143,6 +151,29 @@ def create_order(
                         for item in items
                     ],
                 )
+
+
+def find_order_by_public_id(public_order_id: str) -> dict | None:
+    """Return only persisted order data, never an address supplied by the caller."""
+    with connection() as conn:
+        row = conn.execute(
+            """
+            SELECT id, public_order_id, user_id, customer_name, customer_email,
+                   subtotal, shipping, total, status
+            FROM orders WHERE public_order_id = %s
+            """,
+            (public_order_id,),
+        ).fetchone()
+        if not row:
+            return None
+        items = conn.execute(
+            """
+            SELECT product_id, quantity, unit_price
+            FROM order_items WHERE order_id = %s ORDER BY id
+            """,
+            (row["id"],),
+        ).fetchall()
+        return {**dict(row), "items": [dict(item) for item in items]}
 
 
 def serialize_order(order: dict, items: list[dict]) -> str:

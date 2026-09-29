@@ -13,6 +13,7 @@ from flask import Flask, jsonify, render_template, request, send_from_directory,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from backend import database, storage
+from backend.reenviar_confirmacion import reenviar_bp
 from backend.supabase_repository import ProductRepository
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -24,6 +25,7 @@ app = Flask(
     template_folder=str(FRONTEND_DIR / "templates"),
 )
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "local-development-key-change-me")
+app.register_blueprint(reenviar_bp)
 
 PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "https://dangokobox.com").rstrip("/")
 BUSINESS_INFO = {
@@ -1918,6 +1920,7 @@ def checkout():
             receipt["total"],
             order_items,
             s3_key,
+            public_order_id=order_id,
         )
     except Exception as error:
         # Never notify or present a successful checkout when the durable order
