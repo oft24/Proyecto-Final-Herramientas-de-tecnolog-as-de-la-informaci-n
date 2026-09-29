@@ -4,6 +4,8 @@ Codex se encarga del código, pruebas locales, documentación y plantilla Word. 
 
 Avanza de una fase a la siguiente sin pedirme que pulse «Continue» por rutina. Pregunta solo si hay una decisión material que no puedes tomar con esta instrucción (cuenta/credenciales incorrectas, presupuesto o riesgo de seguridad, servicio fallido, prueba roja que no bloquea o verde que no permite). Las aprobaciones propias de seguridad de Kiro siguen vigentes: no intentes evitarlas ni conviertas errores repetidos en un ciclo infinito.
 
+Para minimizar aprobaciones repetidas, usa comandos cortos e idénticos cuando repitas una comprobación; no cambies por capricho el orden de argumentos, no encadenes comandos y no inventes variantes de PowerShell. Así el alumno puede confiar una comprobación de solo lectura concreta una sola vez. No solicites confianza global para `aws *`, `docker *` o `*`; pide aprobación para cambios de infraestructura.
+
 ## Identidad y límites
 
 - Repositorio de la Final: `https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n.git`, rama `main`. Codex comunicará el **SHA final corregido**. No uses un SHA anterior como Producción.
