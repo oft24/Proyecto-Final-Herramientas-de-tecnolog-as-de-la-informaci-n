@@ -2,6 +2,8 @@
 
 Codex se encarga del código, pruebas locales, documentación y plantilla Word. **No programes, no modifiques archivos de la aplicación, tests, pipeline, Markdown ni Word, y no hagas commits ni push.** Ejecuta y documenta solamente las tareas de AWS descritas aquí. Si detectas un error de código, envía salida, SHA y pasos de reproducción; espera a que Codex entregue un nuevo commit antes de redeplegar.
 
+Avanza de una fase a la siguiente sin pedirme que pulse «Continue» por rutina. Pregunta solo si hay una decisión material que no puedes tomar con esta instrucción (cuenta/credenciales incorrectas, presupuesto o riesgo de seguridad, servicio fallido, prueba roja que no bloquea o verde que no permite). Las aprobaciones propias de seguridad de Kiro siguen vigentes: no intentes evitarlas ni conviertas errores repetidos en un ciclo infinito.
+
 ## Identidad y límites
 
 - Repositorio de la Final: `https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n.git`, rama `main`. Codex comunicará el **SHA final corregido**. No uses un SHA anterior como Producción.
