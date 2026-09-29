@@ -1,0 +1,55 @@
+=== CIERRE QA 80a4a3b ===
+Timestamp UTC: 2026-09-29 16:37:14
+Instancia: i-086d08e1bca370b0f
+
+=== VERIFICACION 1: PIPELINE VERDE SHA REAL ===
+SHA ANTES (rev-parse):
+80a4a3b408837feb08c4097849db1660b237a6f1
+Ejecutando pipeline con Python 3.12...
+Timestamp pipeline: 2026-09-29 16:37:14 UTC
+EXIT_CODE_PIPELINE: 0
+SHA DESPUES (rev-parse):
+80a4a3b408837feb08c4097849db1660b237a6f1
+Decision y pruebas:
+PIPELINE DANGOKO ENTREGA FINAL
+[ETAPA] Pruebas de sintaxis y regresión
+  [OK] Sin hallazgos sobre el umbral definido
+  [OK] Sin hallazgos sobre el umbral definido
+  [OK] Sin hallazgos sobre el umbral definido
+  [OK] Sin hallazgos sobre el umbral definido
+  [OK] Sin hallazgos sobre el umbral definido
+  [OK] Sin hallazgos sobre el umbral definido
+  [OK] Sin hallazgos sobre el umbral definido
+
+=== VERIFICACION 2: RDS pedido BDK-D41BA639AE ===
+Consultando por public_order_id...
+order_items count:
+ 811140     |        1
+
+
+=== VERIFICACION 3: /api/auth/me con sesion de usuario C ===
+Login C: {"user":{"email":"qa-c@test.local","id":8,"name":"QA-C"}} HTTP_CODE:200
+HTTP_CODE me: HTTP_CODE:200
+authenticated: true
+user.id: 8
+user.email_presente: true
+
+=== VERIFICACION 4: Salud notifications directa (Python/urllib) ===
+Contenedor notifications: 69e01931d1a9
+{"service": "notifications", "status": "ok", "log_ready": true}
+Usuario contenedor api:
+appuser
+Usuario contenedor notifications:
+appuser
+Restart policy:
+unless-stopped
+unless-stopped
+
+=== AVANCE 2 INTACTO ===
+{"application":"marketplace","aws_required":true,"catalog_source":"local-fallback","database":"local-fallback","database_ready":true,"rds_required":true,"s3_ready":true,"service":"dangoko","status":"ok","supabase_required":false}
+
+HTTP:200
+--- Espacio libre ---
+/dev/nvme0n1p1  8.0G  6.0G  2.0G  75% /
+
+=== FIN CIERRE QA ===

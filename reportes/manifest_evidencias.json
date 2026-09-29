@@ -1,0 +1,93 @@
+[
+  {
+    "source": "pipeline_rojo_stdout.txt",
+    "published": "reportes/historico/pipeline_rojo_inicial.txt",
+    "source_sha256": "97cc6e1e1f59ceef4f1273e0b3c2e22fdca96b072c4667794c789f841463eb18",
+    "published_sha256": "97cc6e1e1f59ceef4f1273e0b3c2e22fdca96b072c4667794c789f841463eb18",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "pipeline_rojo_metadata.txt",
+    "published": "reportes/historico/pipeline_rojo_inicial_metadata.txt",
+    "source_sha256": "718ea9b93867b1191ca4525768f7e3714687989ddb6c5e1a7601fd84716ca0bc",
+    "published_sha256": "718ea9b93867b1191ca4525768f7e3714687989ddb6c5e1a7601fd84716ca0bc",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "pipeline_verde_80a4a3b_vinculacion.txt",
+    "published": "reportes/aws/vinculacion_verde.txt",
+    "source_sha256": "941c6741ff6275d96d39a32087ea8a3fc0aa7b92a9f80bd37bc6bc31b6624abe",
+    "published_sha256": "941c6741ff6275d96d39a32087ea8a3fc0aa7b92a9f80bd37bc6bc31b6624abe",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "pipeline_rojo_v2_stdout.txt",
+    "published": "reportes/pipeline_bloqueado.txt",
+    "source_sha256": "075f70a0fd6ee7fe2ddf505f483f5ece2d049e57950b12bea95202f1fec765e8",
+    "published_sha256": "075f70a0fd6ee7fe2ddf505f483f5ece2d049e57950b12bea95202f1fec765e8",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "pipeline_rojo_v2_metadata.txt",
+    "published": "reportes/pipeline_bloqueado_metadata.txt",
+    "source_sha256": "08a02f397c9e96be889a4930a8be3a865ced8b8380941a1a83f292e25fff6ff6",
+    "published_sha256": "08a02f397c9e96be889a4930a8be3a865ced8b8380941a1a83f292e25fff6ff6",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "pipeline_verde_80a4a3b_v2.txt",
+    "published": "reportes/pipeline_verde.txt",
+    "source_sha256": "75b60daf504b480ab526979a1d672e1c9883dd5fdf7d125b9c3d7d34efd1ea57",
+    "published_sha256": "75b60daf504b480ab526979a1d672e1c9883dd5fdf7d125b9c3d7d34efd1ea57",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "cierre_qa_80a4a3b.log",
+    "published": "reportes/aws/cierre_qa.txt",
+    "source_sha256": "e4d097b4b40d857b38015edd5b602e71bef0c78ecc4e99e3a14a8e99603e2318",
+    "published_sha256": "e4d097b4b40d857b38015edd5b602e71bef0c78ecc4e99e3a14a8e99603e2318",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "pruebas_funcionales_80a4a3b.txt",
+    "published": "reportes/aws/pruebas_qa.txt",
+    "source_sha256": "354640aab935a5e754c8ab53e1a15a54a22e6ea4e8aeee4db81e48fec2d20b2b",
+    "published_sha256": "2eb202c6b4e7a673e22fd5ea60c99d2c50d2437a372b4385db5a2053294a1e5e",
+    "transformation": "UTF-16 to UTF-8, content unchanged"
+  },
+  {
+    "source": "pruebas_funcionales_produccion.txt",
+    "published": "reportes/aws/pruebas_produccion.txt",
+    "source_sha256": "1dfef0a7c720799573082881a17590cec8ec5e368942defdafa9d9ec70a2f20a",
+    "published_sha256": "1dfef0a7c720799573082881a17590cec8ec5e368942defdafa9d9ec70a2f20a",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "rds_pedido_BDK-D41BA639AE.txt",
+    "published": "reportes/aws/rds_qa.txt",
+    "source_sha256": "4e7093e76a09b0505912b013cb03ca5464dbe6c7e2f6cab7d0e5ebd216d56ff7",
+    "published_sha256": "e0bd363035fe768b4661a750755280c429e63f70713d5cbb7582733cbbc9cd39",
+    "transformation": "UTF-16 to UTF-8, content unchanged"
+  },
+  {
+    "source": "rds_produccion_BDK-4E6A7D2EDB.txt",
+    "published": "reportes/aws/rds_produccion.txt",
+    "source_sha256": "b5d19f870c278c38c4a7c9a52df8d30e0c4bf8dcee75b5f4986f90588d6369b8",
+    "published_sha256": "b5d19f870c278c38c4a7c9a52df8d30e0c4bf8dcee75b5f4986f90588d6369b8",
+    "transformation": "byte-identical copy"
+  },
+  {
+    "source": "prueba_correo_resend.json",
+    "published": "reportes/aws/compra_correo.json",
+    "source_sha256": "98b380d6805a19267b867ef608ea37db1a9f3fc743593f9093108ff0cfc41aee",
+    "published_sha256": "0eea38527548365fdc32cff451c618a6677827d6f308ac2a83eda6a283bd8c44",
+    "transformation": "personal email redacted"
+  },
+  {
+    "source": "resend_entrega.json",
+    "published": "reportes/aws/resend_entrega.json",
+    "source_sha256": "2b01e3395a8d49a28ac810304a7278cb627e86b0bae7098abda737c783219e98",
+    "published_sha256": "aee5b5330190c92e56eed94ad1d78b938d536fc688b0859cd8140fdc115aa613",
+    "transformation": "personal email redacted"
+  }
+]

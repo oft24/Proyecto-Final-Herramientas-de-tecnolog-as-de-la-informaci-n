@@ -1,0 +1,91 @@
+=== PRUEBAS FUNCIONALES QA SHA 80a4a3b ===
+Timestamp UTC: 2026-09-29 16:30:05
+SHA: 80a4a3b408837feb08c4097849db1660b237a6f1
+Instancia: i-086d08e1bca370b0f
+Pipeline verde: PERMITIDO exit 0
+
+--- Verificar SHA final-qa ---
+80a4a3b408837feb08c4097849db1660b237a6f1
+--- Contenedores ---
+NAMES                              STATUS
+dangoko-final-qa-api-1             Up 3 minutes (healthy)
+dangoko-final-qa-notifications-1   Up 3 minutes (healthy)
+--- /salud 5002 ---
+{"application":"marketplace","aws_required":true,"catalog_source":"local-fallback","database":"local-fallback","database_ready":true,"rds_required":true,"s3_ready":true,"service":"dangoko","status":"ok","supabase_required":false}
+
+HTTP:200
+--- Verificar notifications log_ready ---
+{
+  "status": "ok",
+  "database_ready": true,
+  "s3_ready": true
+}
+
+--- SMTP configurado ---
+
+--- [1] Registro usuario C (nuevo) ---
+{"user":{"email":"qa-c@test.local","id":8,"name":"QA-C"}}
+HTTP_CODE:201
+
+--- [2] Registro usuario D (nuevo) ---
+{"user":{"email":"qa-d@test.local","id":9,"name":"QA-D"}}
+HTTP_CODE:201
+
+--- [3] Login usuario C ---
+HTTP_CODE:200
+
+--- [4] Login usuario D ---
+HTTP_CODE:200
+
+--- [5] GET /api/auth/me (usuario C) ---
+HTTP_CODE:200
+{
+  "id": null,
+  "email": null
+}
+user_id_c: null
+
+Notifications JSONL path: /var/lib/docker/volumes/dangoko-final-qa_notification_data/_data/notifications.jsonl
+eventos confirmation_resent antes checkout: 0
+0
+
+--- [6] POST /api/checkout (usuario C) ---
+HTTP_CODE:200
+{"items":[{"id":"811140","quantity":1}],"notification_status":"recorded","order_id":"BDK-D41BA639AE","receipt_key":"orders/a71ebdd8-a718-4788-96fc-cc894a4f4f6f-f30bba3b.json","shipping":"0.00","status":"confirmed","subtotal":"1120.00","total":"1120.00","user_id":8}
+order_id: BDK-D41BA639AE
+receipt_key: orders/a71ebdd8-a718-4788-96fc-cc894a4f4f6f-f30bba3b.json
+
+--- [7] Verificar RDS pedido ---
+
+--- [8] Verificar S3 recibo ---
+{
+    "size": 375,
+    "enc": "AES256"
+}
+
+eventos confirmation_resent antes reenvio: 0
+0
+
+--- [9] POST /pedidos/<order_id>/reenviar-confirmacion (due├▒o C, esperado 202) ---
+{"delivery":"recorded","order_id":"BDK-D41BA639AE","status":"accepted"}
+
+HTTP_CODE:202
+eventos confirmation_resent despues due├▒o: 1 (incremento esperado: 1)
+
+--- [10] POST /pedidos/<order_id>/reenviar-confirmacion (usuario ajeno D, esperado 404) ---
+HTTP_CODE:404
+eventos confirmation_resent despues ajeno: 1 (sin incremento esperado)
+
+--- [11] POST /pedidos/<order_id>/reenviar-confirmacion (anonimo, esperado 401) ---
+HTTP_CODE:401
+eventos confirmation_resent final: 1 (incremento neto total esperado: 1)
+
+--- Avance 2 puerto 5000 ---
+{"application":"marketplace","aws_required":true,"catalog_source":"local-fallback","database":"local-fallback","database_ready":true,"rds_required":true,"s3_ready":true,"service":"dangoko","status":"ok","supabase_required":false}
+
+HTTP:200
+--- Espacio libre ---
+/dev/nvme0n1p1  8.0G  6.0G  2.0G  76% /
+
+=== FIN PRUEBAS ===
+

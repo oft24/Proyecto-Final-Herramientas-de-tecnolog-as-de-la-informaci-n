@@ -21,7 +21,10 @@ variable "db_subnet_ids" {
 variable "allowed_cidr" {
   type        = string
   description = "CIDR allowed to SSH and reach port 5000 (e.g. your public IP /32)"
-  default     = "0.0.0.0/0"
+  validation {
+    condition     = can(cidrnetmask(var.allowed_cidr)) && !contains(["0.0.0.0/0"], var.allowed_cidr)
+    error_message = "Provide an explicit restricted IPv4 CIDR; public access from 0.0.0.0/0 is not allowed."
+  }
 }
 
 variable "ec2_ami" {

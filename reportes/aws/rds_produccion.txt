@@ -1,0 +1,15 @@
+﻿Installed:
+  postgresql15-15.19-1.amzn2023.0.1.x86_64                                      
+  postgresql15-private-libs-15.19-1.amzn2023.0.1.x86_64                         
+
+Complete!
+=== TOTAL filas orders ===
+     8
+
+=== Pedido Produccion BDK-4E6A7D2EDB ===
+ BDK-4E6A7D2EDB  |      10 | 1120.00 | orders/c07551d2-30ec-4b7d-b639-b192fca0b3bd-83416cc9.json | created
+
+=== order_items ===
+ 811140     |        1
+
+

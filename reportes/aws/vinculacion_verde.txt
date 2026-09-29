@@ -1,0 +1,27 @@
+VINCULACIÓN VERDE QA — SHA 80a4a3b408837feb08c4097849db1660b237a6f1
+=========================================================================
+
+Corrida válida para promoción a Producción (cierre_qa_80a4a3b.log):
+  Timestamp UTC:    2026-09-29 16:37:14
+  SHA antes:        80a4a3b408837feb08c4097849db1660b237a6f1  (git rev-parse HEAD)
+  SHA después:      80a4a3b408837feb08c4097849db1660b237a6f1  (git rev-parse HEAD)
+  git status:       limpio (sin cambios en código/tests/pipeline)
+  Exit code:        0
+  Decisión:         PERMITIDO
+  Archivo salida:   /home/ec2-user/evidencias-final/pipeline_verde_80a4a3b_v2.txt
+  CommandId SSM:    d683bfef-d492-4611-853c-21547429eb82
+
+Metadata pipeline_verde_80a4a3b_meta.txt (corrida anterior 16:22):
+  Timestamp UTC:    2026-09-29 16:22:45
+  SHA:              80a4a3b408837feb08c4097849db1660b237a6f1
+  Exit code:        0
+  Decisión:         PERMITIDO
+  Nota:             Esta corrida NO verificó SHA antes/después con git rev-parse HEAD.
+                    Se conserva como registro histórico. NO es la corrida que acredita
+                    el verde de 80a4a3b para efectos de la captura 1.4.
+
+Corrida acreditada para captura 1.4:
+  Archivo:          pipeline_verde_80a4a3b_v2.txt  (salida real)
+  Cierre:           cierre_qa_80a4a3b.log           (SHA antes/después + exit 0)
+  Timestamp:        2026-09-29 16:37:14 UTC
+  SHA observado:    80a4a3b408837feb08c4097849db1660b237a6f1 (antes Y después de ejecución)

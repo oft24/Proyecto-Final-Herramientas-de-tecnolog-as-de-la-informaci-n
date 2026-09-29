@@ -1,0 +1,28 @@
+PIPELINE DANGOKO ENTREGA FINAL
+Umbral: cero avisos HIGH de Bandit, cero vulnerabilidades de dependencias y todas las pruebas correctas
+
+[ETAPA] Pruebas de sintaxis y regresión
+  [OK] Sin hallazgos sobre el umbral definido
+  Bandit: 3 avisos; reporte: reportes/bandit.json
+
+[ETAPA] SAST Bandit
+  [OK] Sin hallazgos sobre el umbral definido
+  pip-audit: 0 avisos únicos; reporte: reportes/pip_audit.json
+
+[ETAPA] SCA pip-audit
+  [OK] Sin hallazgos sobre el umbral definido
+
+[ETAPA] Higiene de secretos
+  [OK] Sin hallazgos sobre el umbral definido
+
+[ETAPA] Infraestructura como código
+  [OK] Sin hallazgos sobre el umbral definido
+
+[ETAPA] Docker endurecido
+  [OK] Sin hallazgos sobre el umbral definido
+  CycloneDX: 10 componentes; reporte: reportes/sbom_cyclonedx.json
+
+[ETAPA] SBOM CycloneDX
+  [OK] Sin hallazgos sobre el umbral definido
+
+DECISIÓN FINAL: PERMITIDO

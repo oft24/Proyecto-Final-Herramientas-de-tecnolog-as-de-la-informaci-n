@@ -1,5 +1,7 @@
 # Declaración de uso de inteligencia artificial
 
+> Antecedente histórico del Avance 2 y preparación inicial. El estado actualizado y la declaración de la Final están en [declaracion_ia.md](declaracion_ia.md); los pendientes descritos abajo corresponden a esa etapa, no al cierre actual.
+
 Usé Codex como apoyo para leer las instrucciones, revisar Bbldak, proponer la separación de servicios y escribir una primera versión del código. La responsabilidad de entender, probar y corregir cada parte sigue siendo del alumno.
 
 ## Qué generé con ayuda de IA

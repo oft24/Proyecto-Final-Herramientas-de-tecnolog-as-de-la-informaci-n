@@ -1,13 +1,21 @@
-# Clasificación del hallazgo: reenvío de pedido ajeno
+# Clasificación del hallazgo de autorización
 
-## Resultado comprobado localmente
+## Reproducción confirmada
 
-El parche inicial del Marketplace añadió `POST /pedidos/<pedido_id>/reenviar-confirmacion` sin verificar la sesión ni que el pedido perteneciera al solicitante. En el commit `a4af214`, las pruebas `test_other_user_cannot_resend_order` y `test_anonymous_user_cannot_resend_order` obtuvieron `202` donde exigían `404` y `401`. La corrida completa en `reportes/pipeline_bloqueado_local.txt` terminó con código de salida 1 y `DECISIÓN FINAL: BLOQUEADO`. **Esto es evidencia local; falta reproducirla en la EC2 QA.**
+El parche inicial añadió POST /pedidos/<pedido_id>/reenviar-confirmacion sin exigir sesión ni verificar pertenencia. En el checkout a4af214, test_anonymous_user_cannot_resend_order recibió 202 en vez de 401 y test_other_user_cannot_resend_order recibió 202 en vez de 404.
 
-## Tipo, impacto y severidad
+[Rojo QA completo](../reportes/pipeline_bloqueado.txt) y [metadata](../reportes/pipeline_bloqueado_metadata.txt): Python 3.12.14, 31 pruebas, dos fallas, BLOQUEADO, pipeline_rc=1. Son pruebas con Flask test client y dependencias aisladas, no un ataque a datos de clientes.
 
-- Tipo: control de acceso roto a nivel de objeto, [CWE-639](https://cwe.mitre.org/data/definitions/639.html), equivalente al riesgo [OWASP API1:2023 Broken Object Level Authorization](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/).
-- Severidad valorada: **media**. Con un identificador de pedido conocido, una persona sin permiso podía activar un nuevo evento de confirmación para una compra ajena y repetir la acción. La respuesta no entregaba el contenido del pedido al atacante; el código BDK aleatorio reduce la facilidad de descubrir pedidos al azar, pero no protege cuando el ID se comparte o filtra.
-- Condición de reproducción: crear pedido del usuario A, iniciar sesión como usuario B (o salir de sesión), invocar el endpoint con el código público de A y observar el `202` indebido. La corrección debe devolver `404` a B, `401` al anónimo y **no crear evento**.
+## Tipo e impacto
 
-No es un falso positivo: el test ejercita la ruta HTTP y comprueba el efecto de notificación. Bandit no señaló esta autorización de negocio; fue la regresión de acceso la que bloqueó el pipeline. Los avisos medios de Bandit se conservan para revisión, pero no se presentan como origen de este hallazgo. La ejecución remediada local pasa la prueba; la verificación QA queda pendiente.
+Control de acceso roto a nivel de objeto, [CWE-639](https://cwe.mitre.org/data/definitions/639.html). Con un código conocido, un usuario no autorizado podía activar la confirmación de una compra ajena. Esto permite abuso del flujo y mensajes no solicitados.
+
+**Severidad: media**, valoración contextual del proyecto, no puntuación CVSS calculada. La respuesta no entregaba el contenido del pedido al atacante. La aleatoriedad del código BDK reduce descubrimiento al azar, pero no autoriza el acceso cuando se conoce o comparte el ID.
+
+## Falso positivo y controles
+
+No es falso positivo: la prueba ejercita la ruta y obtiene aceptación indebida. Lo detectaron las pruebas de autorización, no Bandit. El análisis estático no demuestra la relación de negocio usuario-pedido. Se conservaron tres avisos de Bandit bajo el umbral HIGH; no se ocultaron para obtener verde.
+
+La corrección exige sesión y pertenencia antes de notificar. Los resultados reales en [QA](../reportes/aws/pruebas_qa.txt) y [Producción](../reportes/aws/pruebas_produccion.txt) confirman dueño 202, ajeno 404 y anónimo 401, sin nuevos eventos por los rechazos.
+
+[Commit de remediación](https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n/commit/56b06f53487f5112d3d996162af672efc7e5d72e). El verde QA y la promoción corresponden al SHA posterior 80a4a3b, que también arregló la escritura del volumen de notificaciones.

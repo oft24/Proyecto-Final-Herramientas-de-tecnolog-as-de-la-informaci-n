@@ -1,0 +1,50 @@
+PIPELINE DANGOKO ENTREGA FINAL
+Umbral: cero avisos HIGH de Bandit, cero vulnerabilidades de dependencias y todas las pruebas correctas
+
+[ETAPA] Pruebas de sintaxis y regresión
+  [HALLAZGO] ..........................F.F..
+======================================================================
+FAIL: test_anonymous_user_cannot_resend_order (test_reenviar_confirmacion.ResendAuthorizationTests.test_anonymous_user_cannot_resend_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ec2-user/dangoko-pipeline-red/app/tests/test_reenviar_confirmacion.py", line 51, in test_anonymous_user_cannot_resend_order
+    self.assertEqual(response.status_code, 401)
+AssertionError: 202 != 401
+
+======================================================================
+FAIL: test_other_user_cannot_resend_order (test_reenviar_confirmacion.ResendAuthorizationTests.test_other_user_cannot_resend_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ec2-user/dangoko-pipeline-red/app/tests/test_reenviar_confirmacion.py", line 46, in test_other_user_cannot_resend_order
+    self.assertEqual(response.status_code, 404)
+AssertionError: 202 != 404
+
+----------------------------------------------------------------------
+Ran 31 tests in 1.928s
+
+FAILED (failures=2)
+
+  [BLOQUEA] Pruebas de sintaxis y regresión: umbral incumplido
+  Bandit: 3 avisos; reporte: reportes/bandit.json
+
+[ETAPA] SAST Bandit
+  [OK] Sin hallazgos sobre el umbral definido
+  pip-audit: 0 avisos únicos; reporte: reportes/pip_audit.json
+
+[ETAPA] SCA pip-audit
+  [OK] Sin hallazgos sobre el umbral definido
+
+[ETAPA] Higiene de secretos
+  [OK] Sin hallazgos sobre el umbral definido
+
+[ETAPA] Infraestructura como código
+  [OK] Sin hallazgos sobre el umbral definido
+
+[ETAPA] Docker endurecido
+  [OK] Sin hallazgos sobre el umbral definido
+  CycloneDX: 10 componentes; reporte: reportes/sbom_cyclonedx.json
+
+[ETAPA] SBOM CycloneDX
+  [OK] Sin hallazgos sobre el umbral definido
+
+DECISIÓN FINAL: BLOQUEADO

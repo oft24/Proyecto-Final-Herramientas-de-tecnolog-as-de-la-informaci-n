@@ -15,3 +15,11 @@ __pycache__/
 .pytest_cache/
 bin/
 reportes/*.log
+
+# Operación local, credenciales de proveedores y cookies de pruebas
+credentials
+*.dpapi
+*.har
+*.cookies
+cookies*.txt
+operacion/

@@ -1,7 +1,11 @@
 # Declaración de uso de inteligencia artificial
 
-Usé Codex como apoyo para revisar la rúbrica de la Entrega Final, preparar una copia de la plantilla de evidencias y llevar el seguimiento de los siete pasos. También ayudó a integrar el parche de Marketplace, escribir pruebas que reprodujeron localmente la falla de autorización, corregirla y mejorar el pipeline con Bandit, pip-audit y CycloneDX.
+Usé Codex como apoyo para revisar la rúbrica, integrar el parche, escribir pruebas, corregir la autorización, incorporar Bandit/pip-audit/CycloneDX y organizar documentación y Word. Kiro apoyó las operaciones de AWS y la captura de logs. Codex también configuró SMTP en Producción y ejecutó una prueba de correo autorizada.
 
-Las corridas roja y verde locales son reales y están identificadas como locales; no se presentan como pruebas hechas en QA. La eficacia operativa del arreglo debe confirmarse en esa EC2 y luego en Producción. Kiro se encargará únicamente de infraestructura y despliegue AWS; no de programar la aplicación. Ninguna captura ni resultado de Producción se ha generado con IA. La autoevaluación del Word conserva los pasos AWS sin marcar hasta tener evidencia.
+Los resultados locales y AWS se distinguen por su procedencia. Las capturas provienen de la consola y el navegador utilizados por el alumno, no de imágenes generadas. La IA ayudó a extraerlas del Word y enlazarlas en el repositorio.
 
-La declaración histórica del Avance 2 y de las decisiones técnicas está en [declaracion_uso_ia.md](declaracion_uso_ia.md). La responsabilidad de revisar el código, interpretar los resultados, operar AWS y entregar el trabajo final es mía.
+La automatización cometió errores que se documentan: exit code de tee en la primera corrida roja, metadata de otra ejecución verde y consultas JSON/RDS mal interpretadas. Se repitieron verificaciones y se conservaron los registros originales. No se cambiaron fechas ni se ocultaron fallos para afirmar éxito.
+
+Mi responsabilidad es entender el código y sus límites, revisar la evidencia y presentar con mis palabras. El apoyo de IA no sustituye mi participación ni demuestra por sí solo que haya entregado el Word o realizado la presentación.
+
+[Antecedentes del Avance 2](declaracion_uso_ia.md).

@@ -1,0 +1,3 @@
+# Preserve evidence bytes and original whitespace across Windows/Linux clones.
+reportes/** -text -whitespace
+docs/capturas/** -text

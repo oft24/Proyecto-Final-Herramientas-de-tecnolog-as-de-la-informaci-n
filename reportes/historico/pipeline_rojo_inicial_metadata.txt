@@ -1,0 +1,5 @@
+SHA: a4af214
+Timestamp: 2026-09-29 08:14:41 UTC
+Comando: python pipeline/run_pipeline.py
+Python: 3.12.14
+a4af214 test: registrar parche inicial y bloqueo real de autorizacion

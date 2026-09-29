@@ -1,0 +1,42 @@
+[
+  {
+    "path": "/api/auth/login",
+    "http": 200,
+    "response": {
+      "user": {
+        "email": "destinatario-redactado@example.invalid",
+        "id": 12,
+        "name": "Luis - Prueba correo"
+      }
+    }
+  },
+  {
+    "path": "/api/checkout",
+    "http": 200,
+    "response": {
+      "items": [
+        {
+          "id": "811140",
+          "quantity": 1
+        }
+      ],
+      "notification_status": "recorded",
+      "order_id": "BDK-3E199EDDFD",
+      "receipt_key": "orders/cc829a69-e002-48f9-ae0f-12304f257459-37bc03f3.json",
+      "shipping": "0.00",
+      "status": "confirmed",
+      "subtotal": "1120.00",
+      "total": "1120.00",
+      "user_id": 12
+    }
+  },
+  {
+    "path": "/pedidos/BDK-3E199EDDFD/reenviar-confirmacion",
+    "http": 202,
+    "response": {
+      "delivery": "email_sent",
+      "order_id": "BDK-3E199EDDFD",
+      "status": "accepted"
+    }
+  }
+]

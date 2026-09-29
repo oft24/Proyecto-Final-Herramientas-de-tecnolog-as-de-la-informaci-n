@@ -1,0 +1,14 @@
+=== BUSCAR POR public_order_id EXACTO ===
+ BDK-D41BA639AE  |       8 | 1120.00 | orders/a71ebdd8-a718-4788-96fc-cc894a4f4f6f-f30bba3b.json | created
+
+=== TOTAL FILAS EN orders ===
+     7
+
+=== ULTIMAS 5 FILAS orders (sin email) ===
+ BDK-D41BA639AE  |       8 |  1120.00 | created | orders/a71ebdd8-a718-4788-96fc-cc894a4f4f6f-f30bba3b.json
+ BDK-DA743C7514  |       6 |  1120.00 | created | orders/3f8dff13-0898-43b6-b9c8-01b6c3e8c33c-4f9001ea.json
+                 |       5 | 22920.00 | created | orders/854b752d-c918-4bcb-847e-f6b0157d8c0a-003d4049.json
+                 |         |  2240.00 | created | orders/f9e117ad-33e5-4aaf-bc7c-a2f3ba03f8c4-20a0bbe7.json
+                 |         |  2240.00 | created | orders/f3977db4-7388-412f-aad0-2933a60f35ee-cbfdd089.json
+
+

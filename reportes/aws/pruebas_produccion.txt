@@ -1,0 +1,76 @@
+﻿=== PRUEBAS FUNCIONALES PRODUCCION ===
+Timestamp UTC: 2026-09-29 17:15:42
+SHA: 80a4a3b408837feb08c4097849db1660b237a6f1
+EC2: i-0f3fd952d3b7b73a1
+Endpoint: http://127.0.0.1:5000
+
+--- SHA desplegado ---
+80a4a3b408837feb08c4097849db1660b237a6f1
+
+--- Notifications directo (Python/urllib) ---
+{"service": "notifications", "status": "ok", "log_ready": true}
+
+--- Usuarios contenedores ---
+appuser
+appuser
+
+--- [1] Registro usuario E (Prod) ---
+{"user":{"email":"prod-e@test.local","id":10,"name":"Prod-E"}}
+HTTP_CODE:201
+
+--- [2] Registro usuario F (Prod) ---
+{"user":{"email":"prod-f@test.local","id":11,"name":"Prod-F"}}
+HTTP_CODE:201
+
+--- [3] Login usuario E ---
+HTTP_CODE:200
+
+--- [4] Login usuario F ---
+HTTP_CODE:200
+
+--- [5] /api/auth/me usuario E ---
+HTTP_CODE:200
+authenticated: true
+user.id: 10
+
+eventos confirmation_resent antes checkout: 0
+0
+
+--- [6] POST /api/checkout (usuario E) ---
+HTTP_CODE:200
+{"items":[{"id":"811140","quantity":1}],"notification_status":"recorded","order_id":"BDK-4E6A7D2EDB","receipt_key":"orders/c07551d2-30ec-4b7d-b639-b192fca0b3bd-83416cc9.json","shipping":"0.00","status":"confirmed","subtotal":"1120.00","total":"1120.00","user_id":10}
+order_id: BDK-4E6A7D2EDB
+receipt_key: orders/c07551d2-30ec-4b7d-b639-b192fca0b3bd-83416cc9.json
+user_id: 10
+
+--- [7] RDS pedido por public_order_id ---
+
+--- [8] S3 head-object recibo ---
+{
+    "size": 385,
+    "enc": "AES256"
+}
+
+eventos confirmation_resent antes reenvio: 0
+0
+
+--- [9] Reenvio due├▒o E (esperado 202) ---
+{"delivery":"recorded","order_id":"BDK-4E6A7D2EDB","status":"accepted"}
+
+HTTP_CODE:202
+eventos despues due├▒o: 1
+
+--- [10] Reenvio usuario ajeno F (esperado 404) ---
+HTTP_CODE:404
+eventos despues ajeno: 1
+
+--- [11] Reenvio anonimo (esperado 401) ---
+HTTP_CODE:401
+eventos final: 1 (incremento neto esperado: 1)
+
+--- Espacio y memoria ---
+/dev/nvme0n1p1   20G  2.8G   18G  14% /
+Mem:             911         417          89           0         404         341
+
+=== FIN PRUEBAS PRODUCCION ===
+
