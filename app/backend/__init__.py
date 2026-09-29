@@ -1,0 +1,1 @@
+"""BuldakShop backend package."""

@@ -1,0 +1,43 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--threads", "2", "--timeout", "60", "app:app"]
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST:?Configura el endpoint de RDS en .env}
+      NOTIFICATIONS_URL: http://notifications:5001
+      REQUIRE_NOTIFICATIONS: "true"
+    ports:
+      - "5000:5000"
+    depends_on:
+      notifications:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/salud', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  notifications:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "notifications_service.py"]
+    environment:
+      PORT: "5001"
+      NOTIFICATION_LOG_PATH: /var/lib/dangoko/notifications.jsonl
+    volumes:
+      - notification_data:/var/lib/dangoko
+    expose:
+      - "5001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/salud', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  notification_data:

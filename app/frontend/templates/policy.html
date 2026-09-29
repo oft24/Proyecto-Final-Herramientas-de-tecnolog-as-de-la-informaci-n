@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ policy.description }}">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{{ public_base_url }}/{{ policy_key }}">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css?v=43">
+    <title>{{ policy.title }} — dangoko</title>
+  </head>
+  <body class="policy-page">
+    <a class="skip-link" href="#policy-content">Saltar al contenido</a>
+    <header class="policy-header">
+      <a class="brand" href="/" aria-label="Volver al catálogo de dangoko">dangoko<span class="brand__dot">.</span></a>
+      <a class="pill pill--dark" href="/">Volver al catálogo</a>
+    </header>
+    <main id="policy-content" class="policy-main">
+      <p class="section-index">Información legal · México</p>
+      <h1>{{ policy.title }}</h1>
+      <p class="policy-lead">{{ policy.description }}</p>
+      <nav class="policy-nav" aria-label="Políticas de dangoko">
+        <a href="/terminos"{% if policy_key == 'terminos' %} aria-current="page"{% endif %}>Términos</a>
+        <a href="/privacidad"{% if policy_key == 'privacidad' %} aria-current="page"{% endif %}>Privacidad</a>
+        <a href="/devoluciones"{% if policy_key == 'devoluciones' %} aria-current="page"{% endif %}>Cambios y devoluciones</a>
+        <a href="/cookies"{% if policy_key == 'cookies' %} aria-current="page"{% endif %}>Cookies</a>
+      </nav>
+      <div class="policy-sections">
+        {% for heading, copy in policy.sections %}
+          <section>
+            <h2>{{ heading }}</h2>
+            <p>{{ copy }}</p>
+          </section>
+        {% endfor %}
+      </div>
+      <section class="provider-card" aria-labelledby="provider-title">
+        <h2 id="provider-title">Información del proveedor y contacto</h2>
+        <dl>
+          <div><dt>Nombre comercial</dt><dd>{{ business.trade_name }}</dd></div>
+          {% if business.legal_name %}<div><dt>Nombre o razón social</dt><dd>{{ business.legal_name }}</dd></div>{% endif %}
+          {% if business.rfc %}<div><dt>RFC</dt><dd>{{ business.rfc }}</dd></div>{% endif %}
+          {% if business.address %}<div><dt>Domicilio</dt><dd>{{ business.address }}</dd></div>{% endif %}
+          {% if business.phone %}<div><dt>Teléfono</dt><dd>{{ business.phone }}</dd></div>{% endif %}
+          {% if business.email %}<div><dt>Correo</dt><dd><a href="mailto:{{ business.email }}">{{ business.email }}</a></dd></div>{% endif %}
+        </dl>
+      </section>
+      <p class="policy-source">Marco de referencia: <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf" rel="noopener noreferrer">Ley Federal de Protección de Datos Personales en Posesión de los Particulares</a> y <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPC.pdf" rel="noopener noreferrer">Ley Federal de Protección al Consumidor</a>.</p>
+    </main>
+    <footer class="policy-footer">
+      <span>Última actualización: 6 de septiembre de 2026</span>
+      <a href="/">dangokobox.com</a>
+    </footer>
+  </body>
+</html>
