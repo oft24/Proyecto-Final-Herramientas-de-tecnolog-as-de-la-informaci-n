@@ -47,7 +47,7 @@ No subas `.env`, `terraform.tfvars`, tokens ni contraseñas. Usa `.env.example` 
 
 ## Preparar una EC2 para esta entrega
 
-Esta es una copia con historial Git independiente. No cambies el remoto ni mezcles la carpeta del Avance 2. En una EC2 destinada a QA o Producción, clona este repositorio en una carpeta nueva y crea allí su propio `.env` privado:
+Esta es una copia con historial Git independiente. No cambies el remoto ni mezcles la carpeta del Avance 2. En una EC2 destinada a QA o Producción, clona este repositorio en una carpeta nueva y crea allí su propio `.env` privado. En QA puedes usar `HOST_PORT=5002` para no ocupar el puerto 5000 del Avance 2; en Producción usa `HOST_PORT=5000` si está libre:
 
 ```bash
 git clone https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n.git
