@@ -38,7 +38,7 @@ class ShowroomTests(unittest.TestCase):
         self.assertIn(b'css/style.css?v=43', response.data)
         self.assertIn(b'js/device.js?v=1', response.data)
         self.assertIn(b'js/i18n.js?v=20', response.data)
-        self.assertIn(b'js/app.js?v=47', response.data)
+        self.assertIn(b'js/app.js?v=48', response.data)
         self.assertIn(b'/assets/mobile-catalog/811140.webp?v=1', response.data)
         self.assertIn(b'data-carousel-srcset="/assets/mobile-catalog/', response.data)
         self.assertIn(b'data-server-device="desktop"', response.data)
@@ -89,6 +89,7 @@ class ShowroomTests(unittest.TestCase):
         self.assertIn(b'data-clear-cart', response.data)
         self.assertIn(b'data-auth-dialog', response.data)
         self.assertIn(b'data-auth-form', response.data)
+        self.assertIn(b'data-resend-form', response.data)
         self.assertIn(b'Crear pedido', response.data)
         self.assertIn(b'data-story-section', response.data)
         self.assertIn(b'data-story-sweetness-stat', response.data)
@@ -415,6 +416,29 @@ class ShowroomTests(unittest.TestCase):
         self.assertEqual(payload["subtotal"], "5600.00")
         self.assertEqual(payload["shipping"], "0.00")
         self.assertEqual(payload["total"], "5600.00")
+
+    def test_signed_in_checkout_uses_account_email_not_supplied_address(self):
+        with patch(
+            "backend.app._current_user",
+            return_value={"id": 7, "name": "Compradora", "email": "account@example.invalid"},
+        ):
+            response = self.client.post(
+                "/api/checkout",
+                json={
+                    "customer": {
+                        "name": "Compradora",
+                        "email": "other@example.invalid",
+                        "privacy_consent": True,
+                    },
+                    "cart": [{"id": "811140", "quantity": 1}],
+                },
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.db_create_order.call_args.args[3], "account@example.invalid")
+        self.assertEqual(
+            self.notification_post.call_args.kwargs["json"]["email"],
+            "account@example.invalid",
+        )
 
     def test_checkout_accepts_new_noodle_and_chip_products(self):
         response = self.client.post(

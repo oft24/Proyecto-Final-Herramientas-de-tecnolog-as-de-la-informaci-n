@@ -25,7 +25,7 @@
     <script src="/js/device.js?v=1"></script>
     <link rel="stylesheet" href="/css/style.css?v=43">
     <script defer src="/js/i18n.js?v=20"></script>
-    <script defer src="/js/app.js?v=47"></script>
+    <script defer src="/js/app.js?v=48"></script>
   </head>
   <body>
     <a class="skip-link" href="#main" data-i18n="skip">Saltar al contenido</a>
@@ -593,6 +593,11 @@
         <span class="success-mark">✓</span>
         <h3 data-auth-session-title>Sesión iniciada</h3>
         <p data-auth-session-copy></p>
+        <form class="auth-form" data-resend-form>
+          <label><span>Reenviar confirmación de un pedido propio</span><input name="order_code" aria-label="Código de tu pedido" placeholder="BDK-ABCDEF1234" pattern="[Bb][Dd][Kk]-[0-9A-Fa-f]{10}" maxlength="14" required></label>
+          <button class="checkout-button" type="submit">Solicitar reenvío <span aria-hidden="true">→</span></button>
+          <p data-resend-result role="status" aria-live="polite"></p>
+        </form>
         <button class="checkout-secondary" type="button" data-auth-logout>Cerrar sesión</button>
       </div>
     </dialog>

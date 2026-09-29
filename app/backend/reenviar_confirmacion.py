@@ -1,8 +1,4 @@
-"""Adaptación inicial del parche de Marketplace para el modelo de pedidos de Dangoko.
-
-Esta versión conserva la omisión de autorización del parche docente para la
-corrida roja de QA. No debe desplegarse públicamente ni promoverse a Producción.
-"""
+"""Reenvío de confirmaciones solo para el propietario del pedido."""
 
 from __future__ import annotations
 
@@ -11,7 +7,7 @@ import re
 from urllib.parse import urlparse
 
 import requests
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 
 from backend import database
 
@@ -27,6 +23,11 @@ def reenviar_confirmacion(pedido_id: str):
     if origin and urlparse(origin).netloc.lower() != request.host.lower():
         return jsonify(error="Origen de solicitud no permitido."), 403
 
+    try:
+        user_id = int(session["user_id"])
+    except (KeyError, TypeError, ValueError):
+        return jsonify(error="Inicia sesión para consultar tus pedidos."), 401
+
     pedido_id = pedido_id.upper()
     if not ORDER_CODE.fullmatch(pedido_id):
         return jsonify(error="Pedido no encontrado."), 404
@@ -36,8 +37,15 @@ def reenviar_confirmacion(pedido_id: str):
         return jsonify(error="La base de datos no está disponible."), 503
     if pedido is None:
         return jsonify(error="Pedido no encontrado."), 404
-
-    # La autorización por propietario se añadirá después de la corrida roja.
+    if pedido["user_id"] != user_id:
+        # No reveal whether another user's order exists.
+        return jsonify(error="Pedido no encontrado."), 404
+    try:
+        comprador = database.find_user_by_id(user_id)
+    except Exception:
+        return jsonify(error="La base de datos no está disponible."), 503
+    if comprador is None:
+        return jsonify(error="Inicia sesión para consultar tus pedidos."), 401
     try:
         response = requests.post(
             os.getenv("NOTIFICATIONS_URL", "http://notifications:5001").rstrip("/")
@@ -45,7 +53,7 @@ def reenviar_confirmacion(pedido_id: str):
             json={
                 "order_id": pedido["public_order_id"],
                 "customer_name": pedido["customer_name"],
-                "email": pedido["customer_email"],
+                "email": comprador["email"],
                 "items": [
                     {
                         "product_id": item["product_id"],

@@ -1,35 +1,25 @@
-# Seguimiento de la Entrega Final
+# Seguimiento de la Entrega Final — 29-09-2026
 
-Esta lista separa la base heredada del Avance 2 de los siete pasos nuevos que exige la Entrega Final. Ningún resultado local sustituye una captura de QA o Producción. Actualizarla junto con el Word `entrega/Evidencias_EntregaFinal_en_progreso.docx` cuando exista evidencia verificable.
+Los resultados locales demuestran la falla y su corrección, pero **no sustituyen** las corridas y capturas de QA ni Producción solicitadas en la rúbrica. El Word se actualizará con evidencia AWS, sin marcar pasos aún no ejecutados.
 
-| Paso de la rúbrica | Estado al 29-09-2026 | Evidencia que falta |
+| Paso | Estado comprobado | Pendiente para la rúbrica |
 |---|---|---|
-| 1. Aplicar el parche de Marketplace en la EC2 de QA del Avance 2 | Pendiente | Código integrado sin corregir y prueba del endpoint en QA. |
-| 2. Pipeline bloqueando ese parche | Pendiente | Corrida real completa en QA, control fallido y decisión final BLOQUEADO en `reportes/pipeline_bloqueado.*`. |
-| 3. Clasificar hallazgo | Pendiente de prueba | `docs/clasificacion_hallazgo.md`: tipo/CWE, severidad con impacto y explotabilidad, falso positivo sí/no. |
-| 4. Separar contención y prevención | Pendiente | `docs/respuesta_incidente.md` con acciones distintas y verificadas. |
-| 5. Remediar la causa raíz | Pendiente | Diff y commit de autorización manteniendo el reenvío funcional; pruebas contra acceso a pedido ajeno. |
-| 6. Pipeline permitiendo después del arreglo | Pendiente | Corrida real completa en QA, decisión final PERMITIDO en `reportes/pipeline_verde.*`. |
-| 7. Promover a EC2 nueva de Producción | Pendiente | `docs/evidencia_produccion.md`, captura de instancia nueva, commit desplegado, aplicación y reenvío corregido funcionando. |
+| 1. Parche de Marketplace en la EC2 QA heredada | Endpoint inicial integrado en commit local `a4af214`; falla de autorización demostrada con pruebas locales. | Clonar en la misma EC2 QA, sin desplegar la revisión vulnerable. Capturar instancia e integración. |
+| 2. Pipeline que bloquea | `reportes/pipeline_bloqueado_local.txt`: exit 1, dos pruebas de autorización fallan, `BLOQUEADO`. | Repetir en QA, guardar stdout/stderr/exit y captura legible. |
+| 3. Clasificación | `docs/clasificacion_hallazgo.md`: CWE-639, severidad media, impacto, reproducción y falso positivo descartado localmente. | Correlacionar con salida QA. |
+| 4. Contención y prevención | `docs/respuesta_incidente.md`: la revisión vulnerable no se ejecutó como servicio público; corrección de sesión/propiedad y pruebas locales. | Confirmar contención y resultado en QA. |
+| 5. Remediación | Código corregido y tests locales del propietario/ajeno/anónimo/errores; commit final pendiente. | Registrar SHA remediado y validar extremo a extremo en QA. |
+| 6. Pipeline que permite | Corrida final local: exit 0, `PERMITIDO`; 37 pruebas pasan, Bandit sin HIGH, pip-audit sin avisos y SBOM CycloneDX con 10 componentes. `reportes/pipeline_verde_local.txt` conserva el veredicto local. | Repetir en QA sobre el mismo SHA que vaya a Producción. |
+| 7. Nueva EC2 Producción | `docs/evidencia_produccion.md` es plantilla pendiente, **no evidencia**. | Solo tras QA verde: crear EC2 nueva, desplegar, probar, tomar capturas. |
 
-## Hallazgos preliminares del parche entregado
+## Capturas aún por reunir en el Word
 
-El endpoint `POST /pedidos/<int:pedido_id>/reenviar-confirmacion` obtiene un pedido por identificador y reenvía su confirmación sin verificar sesión ni propiedad. Esto sugiere una falla de autorización por objeto, pero la clasificación definitiva y el bloqueo del pipeline deben documentarse después de ejecutarlo en QA. Además, el parche usa imports de ejemplo (`app.db`, `app.notificaciones`) y un ID entero, mientras que Dangoko usa IDs de pedido tipo `BDK-...`; la integración debe adaptar estos puntos sin corregir aún la falla de autorización para la primera corrida roja. No se debe afirmar que la herramienta lo detectó antes de ver su salida real.
+1. Pipeline rojo en QA con control y decisión visibles.
+2. Hallazgo exacto de autorización en reporte/prueba QA.
+3. Diff o commit de remediación identificable.
+4. Pipeline verde en QA.
+5. Identidad de la misma EC2 QA del Avance 2 (`i-086d08e1bca370b0f`).
+6. EC2 nueva de Producción, con ID propio.
+7. Aplicación corregida funcionando en esa EC2.
 
-## Evidencia visual pendiente en el Word
-
-1. Pipeline bloqueando en QA.
-2. Hallazgo exacto en reporte de herramienta o prueba manual.
-3. Diff/commit real de remediación.
-4. Pipeline permitiendo en QA.
-5. Misma instancia EC2 de QA del Avance 2.
-6. Instancia EC2 nueva de Producción.
-7. Aplicación corregida funcionando en Producción.
-
-## Puertas de calidad
-
-- Confirmar identidad de instancia y cuenta AWS antes de modificar QA; no copiar credenciales al repositorio.
-- Integrar el parche en rama de trabajo o commit identificable y capturar el estado vulnerable antes de remediarlo.
-- Si Bandit no detecta la autorización ausente, añadir una prueba de seguridad que falle por acceso a pedido ajeno y registrar honestamente la limitación del SAST.
-- No desplegar en Producción hasta que el mismo commit corregido pase pruebas y pipeline en QA.
-- Conservar en el Word solo hechos demostrados. Los campos pendientes se marcan como tales; no se inventan capturas ni resultados.
+Kiro solo operará AWS y comunicará salidas/capturas; Codex mantiene código, reportes y Word. El video/presentación se atiende después. No se debe afirmar entrega de correo real sin `delivery=email_sent`, y aun ese estado solo confirma aceptación por SMTP, no recepción final.

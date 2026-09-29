@@ -47,13 +47,14 @@ No subas `.env`, `terraform.tfvars`, tokens ni contraseñas. Usa `.env.example` 
 
 ## Preparar una EC2 para esta entrega
 
-Esta es una copia con historial Git independiente. No cambies el remoto ni mezcles la carpeta del Avance 2. En una EC2 destinada a QA o Producción, clona este repositorio en una carpeta nueva y crea allí su propio `.env` privado. En QA puedes usar `HOST_PORT=5002` para no ocupar el puerto 5000 del Avance 2; en Producción usa `HOST_PORT=5000` si está libre:
+Esta es una copia con historial Git independiente. No cambies el remoto ni mezcles la carpeta del Avance 2. En una EC2 destinada a QA o Producción, clona este repositorio en una carpeta nueva y crea allí su propio `.env` privado. En QA usa `HOST_BIND=127.0.0.1` y `HOST_PORT=5002` para no ocupar el puerto 5000 del Avance 2 ni exponer QA públicamente; en Producción usa el enlace y puerto permitidos por su grupo de seguridad:
 
 ```bash
 git clone https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n.git
 cd Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n
 cp .env.example .env
 # Completa DB_HOST, DB_PASSWORD, S3_BUCKET y FLASK_SECRET_KEY sin mostrarlos en logs.
+# Para QA, fija HOST_BIND=127.0.0.1 y HOST_PORT=5002 en .env.
 chmod 600 .env
 docker compose build --no-cache api
 docker compose up -d --force-recreate --remove-orphans api notifications
@@ -75,11 +76,13 @@ POST /api/auth/logout
 GET  /api/auth/me
 ```
 
-El checkout crea el pedido en RDS antes de notificar. Si falla la creación en RDS, responde `503` y no se envía ninguna notificación ni se presenta una confirmación exitosa. WhatsApp no se abre automáticamente en este avance.
+El checkout crea el pedido en RDS antes de notificar. Si falla la creación en RDS, responde `503` y no se envía ninguna notificación ni se presenta una confirmación exitosa. WhatsApp no se abre automáticamente. Un usuario autenticado puede solicitar el reenvío **solo de un pedido propio** mediante `POST /pedidos/<codigo-BDK>/reenviar-confirmacion`; un usuario ajeno recibe `404` y uno anónimo `401`. Los pedidos antiguos sin código público persistido y los pedidos de invitado no pueden reenviarse desde esta ruta.
+
+El servicio de notificaciones registra un evento en todos los casos aceptados. Sin `SMTP_HOST` responde `delivery=recorded`, que **no significa correo entregado**. Con SMTP autorizado y configurado envía un correo de texto y responde `delivery=email_sent` cuando la biblioteca de correo confirma el envío al servidor SMTP. Esto tampoco certifica la entrega final al buzón.
 
 ## Estado de la Entrega Final
 
-Esta copia incluye la base del Avance 2 y la mejora del pipeline solicitada en la retroalimentación: Bandit, pip-audit, CycloneDX y Compose conectado a RDS. Aún falta integrar el parche de reenvío de confirmación, capturar la corrida roja real en QA, remediar el control de acceso y desplegar la versión aprobada en una EC2 nueva de Producción. Los reportes actuales son la línea base local, no las evidencias finales de ese flujo.
+Esta copia incluye la base del Avance 2 y la mejora del pipeline solicitada en la retroalimentación: Bandit, pip-audit, CycloneDX y Compose conectado a RDS. El parche se probó localmente en estado vulnerable (commit `a4af214`, pipeline bloqueado) y después se corrigió la autorización (pipeline local permitido). **Faltan las corridas equivalentes en QA, el despliegue del código corregido y la nueva EC2 de Producción.** Los reportes locales no sustituyen las capturas AWS de la rúbrica. El encargo de infraestructura, sin programación de la aplicación, está en [docs/encargo_kiro_aws.md](docs/encargo_kiro_aws.md).
 
 ## Validación de entrega
 

@@ -200,6 +200,8 @@
     authSession: document.querySelector("[data-auth-session]"),
     authSessionCopy: document.querySelector("[data-auth-session-copy]"),
     authLogout: document.querySelector("[data-auth-logout]"),
+    resendForm: document.querySelector("[data-resend-form]"),
+    resendResult: document.querySelector("[data-resend-result]"),
     cartTrigger: document.querySelector("[data-cart-trigger]"),
     cartCount: document.querySelector("[data-cart-count]"),
     cartTitleCount: document.querySelector("[data-cart-title-count]"),
@@ -1252,6 +1254,9 @@
     dom.authSession.hidden = !signedIn;
     if (signedIn) {
       dom.authSessionCopy.textContent = `${state.currentUser.email} · tus pedidos se guardarán en RDS.`;
+      if (state.lastOrder?.id) dom.resendForm.elements.namedItem("order_code").value = state.lastOrder.id;
+    } else {
+      dom.resendResult.textContent = "";
     }
   }
 
@@ -1330,6 +1335,31 @@
     renderAuthState(null);
     setAuthMode("login");
     showToast("Sesión cerrada.");
+  }
+
+  async function submitResend(event) {
+    event.preventDefault();
+    if (!state.currentUser) return;
+    const button = dom.resendForm.querySelector('button[type="submit"]');
+    const orderCode = String(dom.resendForm.elements.namedItem("order_code").value).trim().toUpperCase();
+    dom.resendResult.textContent = "";
+    button.disabled = true;
+    try {
+      const response = await fetch(`/pedidos/${encodeURIComponent(orderCode)}/reenviar-confirmacion`, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        credentials: "same-origin"
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || "No se pudo solicitar el reenvío.");
+      dom.resendResult.textContent = payload.delivery === "email_sent"
+        ? "Correo de confirmación reenviado."
+        : "Solicitud registrada. El envío por correo requiere configurar SMTP.";
+    } catch (error) {
+      dom.resendResult.textContent = error.message;
+    } finally {
+      button.disabled = false;
+    }
   }
 
   function openLegal() {
@@ -1604,6 +1634,7 @@
     if (!dom.checkoutDialog.open && !dom.searchDialog.open) document.body.classList.remove("is-locked");
   });
   dom.authForm.addEventListener("submit", submitAuth);
+  dom.resendForm.addEventListener("submit", submitResend);
   dom.authLogout.addEventListener("click", logout);
 
   document.querySelectorAll("[data-open-legal]").forEach((button) => button.addEventListener("click", openLegal));

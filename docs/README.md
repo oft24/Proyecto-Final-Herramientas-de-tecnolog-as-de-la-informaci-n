@@ -21,7 +21,7 @@ La aplicación queda en `http://localhost:5000`. El endpoint de salud es `GET /s
 3. `POST /api/checkout` valida productos, cantidades y consentimiento.
 4. El API guarda el pedido y sus partidas en RDS PostgreSQL.
 5. El API escribe un recibo privado en S3 con cifrado AES256.
-6. El API llama a `notifications` por HTTP. Ese contenedor registra la confirmación en un archivo de eventos.
+6. El API llama a `notifications` por HTTP. Ese contenedor registra la confirmación en un archivo de eventos. El reenvío de un pedido propio requiere sesión y compara el propietario en RDS antes de llamar al servicio; sin SMTP se registra el evento, pero no se afirma que el correo llegó.
 
 ## Servicios de AWS
 
@@ -34,7 +34,7 @@ Terraform deja la configuración en `infra/`. Los valores sensibles se proporcio
 
 ## Variables importantes
 
-En el despliegue real se deben establecer `DB_HOST` con el endpoint de RDS, `DB_SSLMODE=require`, `S3_BUCKET`, `AWS_REGION`, `FLASK_SECRET_KEY`, las credenciales de AWS mediante el mecanismo seguro disponible y `REQUIRE_RDS=true`, `REQUIRE_AWS=true`. El Compose principal usa RDS y ya no contiene PostgreSQL local.
+En el despliegue real se deben establecer `DB_HOST` con el endpoint de RDS, `DB_SSLMODE=require`, `S3_BUCKET`, `AWS_REGION`, `FLASK_SECRET_KEY`, las credenciales de AWS mediante el mecanismo seguro disponible y `REQUIRE_RDS=true`, `REQUIRE_AWS=true`. Para QA se fijan `HOST_BIND=127.0.0.1` y `HOST_PORT=5002`; SMTP es opcional y debe configurarse privadamente si se desea un envío real. El Compose principal usa RDS y ya no contiene PostgreSQL local.
 
 ## Pipeline
 
@@ -51,4 +51,4 @@ python pipeline/run_pipeline.py
 
 ## Estado de entrega
 
-Esta es la base para la Entrega Final, derivada del Avance 2 y con el pipeline mejorado. Los recursos y resultados del Avance 2 son antecedentes, no evidencias de QA ni Producción para esta entrega. Aún faltan integrar el parche funcional, demostrar una corrida roja real y su remediación verde, desplegar y probar los ambientes requeridos, y reunir las capturas y el video finales.
+Esta es la base para la Entrega Final, derivada del Avance 2 y con el pipeline mejorado. El parche funcional y las corridas roja/verde están probados **localmente**; ver [clasificacion_hallazgo.md](clasificacion_hallazgo.md) y [respuesta_incidente.md](respuesta_incidente.md). Los recursos y resultados del Avance 2 son antecedentes, no evidencias de QA ni Producción para esta entrega. Faltan ejecutar los pipelines en QA, desplegar y probar QA/Producción, y reunir capturas y video finales.

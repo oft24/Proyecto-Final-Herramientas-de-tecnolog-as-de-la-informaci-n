@@ -1880,8 +1880,11 @@ def checkout():
     shipping = Decimal("0")
     order_id = f"BDK-{token_hex(5).upper()}"
     authenticated_user = _current_user()
-    customer_email = str(customer.get("email", "")).strip() or (
-        authenticated_user["email"] if authenticated_user else None
+    # A signed-in buyer cannot redirect confirmations to a caller-supplied
+    # address. Guest orders have no owner and are not eligible for resends.
+    customer_email = (
+        authenticated_user["email"] if authenticated_user
+        else str(customer.get("email", "")).strip() or None
     )
     order_uuid = str(uuid4())
     order_items = [
