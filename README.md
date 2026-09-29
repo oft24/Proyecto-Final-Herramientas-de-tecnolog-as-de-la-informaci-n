@@ -82,7 +82,7 @@ El servicio de notificaciones registra un evento en todos los casos aceptados. S
 
 ## Estado de la Entrega Final
 
-Esta copia incluye la base del Avance 2 y la mejora del pipeline solicitada en la retroalimentación: Bandit, pip-audit, CycloneDX y Compose conectado a RDS. El parche se probó localmente en estado vulnerable (commit `a4af214`, pipeline bloqueado) y después se corrigió la autorización (pipeline local permitido). **Faltan las corridas equivalentes en QA, el despliegue del código corregido y la nueva EC2 de Producción.** Los reportes locales no sustituyen las capturas AWS de la rúbrica. El encargo de infraestructura, sin programación de la aplicación, está en [docs/encargo_kiro_aws.md](docs/encargo_kiro_aws.md).
+Esta copia incluye la base del Avance 2 y la mejora del pipeline solicitada en la retroalimentación: Bandit, pip-audit, CycloneDX y Compose conectado a RDS. El parche se probó localmente en estado vulnerable (commit `a4af214`, pipeline bloqueado) y después se corrigió la autorización (pipeline local permitido). **Faltan las corridas equivalentes en QA, el despliegue del código corregido y la nueva EC2 de Producción.** Los reportes locales no sustituyen las capturas AWS de la rúbrica. El [encargo de infraestructura](docs/encargo_kiro_aws.md) y los [prompts por fases para Kiro](docs/prompts_kiro_aws_por_fases.md) separan inventario, QA rojo, QA verde, Producción y cierre de evidencia.
 
 ## Validación de entrega
 
