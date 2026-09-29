@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Dangoko en AWS: pedidos y confirmaciones",
+    "output": "docs/archify/dangoko.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n.git",
+      "revision": "1674cb1f4f51cdaadf24a647af37dadfbe64b311"
+    }
+  },
+  "components": [
+    {
+      "id": "usuario",
+      "type": "external",
+      "label": "Navegador",
+      "sublabel": "Acceso por tunel SSM",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        180,
+        70
+      ],
+      "sources": [
+        {
+          "path": "docs/evidencia_produccion.md",
+          "line": 13,
+          "end_line": 17
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "API Flask en EC2",
+      "sublabel": "Sesion y propietario",
+      "pos": [
+        420,
+        240
+      ],
+      "size": [
+        200,
+        80
+      ],
+      "sources": [
+        {
+          "path": "docker-compose.yml",
+          "line": 1,
+          "end_line": 23
+        },
+        {
+          "path": "app/backend/reenviar_confirmacion.py",
+          "line": 19,
+          "end_line": 54
+        }
+      ]
+    },
+    {
+      "id": "rds",
+      "type": "database",
+      "label": "RDS PostgreSQL",
+      "sublabel": "Usuarios y pedidos",
+      "pos": [
+        420,
+        40
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "app/backend/database.py",
+          "line": 14,
+          "end_line": 75
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "type": "cloud",
+      "label": "S3 privado",
+      "sublabel": "Recibos JSON / AES256",
+      "pos": [
+        420,
+        470
+      ],
+      "size": [
+        200,
+        70
+      ],
+      "sources": [
+        {
+          "path": "app/backend/storage.py",
+          "line": 31,
+          "end_line": 43
+        }
+      ]
+    },
+    {
+      "id": "notif",
+      "type": "backend",
+      "label": "Notifications",
+      "sublabel": "Registro y reenvio",
+      "pos": [
+        840,
+        240
+      ],
+      "size": [
+        190,
+        80
+      ],
+      "sources": [
+        {
+          "path": "app/notifications_service.py",
+          "line": 31,
+          "end_line": 70
+        },
+        {
+          "path": "docker-compose.yml",
+          "line": 25,
+          "end_line": 50
+        }
+      ]
+    },
+    {
+      "id": "resend",
+      "type": "external",
+      "label": "Resend SMTP",
+      "sublabel": "Correo de confirmacion",
+      "pos": [
+        840,
+        470
+      ],
+      "size": [
+        190,
+        70
+      ],
+      "sources": [
+        {
+          "path": "docs/correo_confirmacion.md",
+          "line": 3,
+          "end_line": 25
+        },
+        {
+          "path": "app/notifications_service.py",
+          "line": 73,
+          "end_line": 101
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "usuario",
+      "to": "api",
+      "label": "HTTP por SSM"
+    },
+    {
+      "from": "api",
+      "to": "rds",
+      "label": "SQL / 5432"
+    },
+    {
+      "from": "api",
+      "to": "s3",
+      "label": "Guarda recibo"
+    },
+    {
+      "from": "api",
+      "to": "notif",
+      "label": "HTTP autorizado"
+    },
+    {
+      "from": "notif",
+      "to": "resend",
+      "label": "SMTP / STARTTLS"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Despliegue del laboratorio",
+      "items": [
+        "QA y Produccion usan EC2 separadas en us-west-2.",
+        "Cada Compose contiene api y notifications; no PostgreSQL local.",
+        "QA y Produccion comparten RDS y S3."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Autorizacion y correo",
+      "items": [
+        "Reenvio: propietario 202, ajeno 404, anonimo 401.",
+        "Solo se solicita notificacion despues de verificar pertenencia.",
+        "SMTP de pruebas; destinatarios arbitrarios requieren dominio verificado."
+      ]
+    }
+  ]
+}

@@ -22,7 +22,13 @@ Empieza por el [índice de requisitos y evidencias](docs/ENTREGA_FINAL.md).
 
 Los logs AWS son históricos del **29-09-2026**, no garantizan que las instancias estén encendidas ahora. Código probado y desplegado: `80a4a3b408837feb08c4097849db1660b237a6f1`. El commit posterior de cierre documental no representa un nuevo despliegue.
 
-## Clonar y preparar
+## Diagrama de arquitectura con Archify
+
+![Arquitectura de Dangoko generada con Archify](docs/archify/dangoko.png)
+
+[Fuente editable, visor interactivo y validación de Archify](docs/archify/README.md).
+
+## Clonar y preparar el entorno
 
 ```bash
 git clone https://github.com/oft24/Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n.git

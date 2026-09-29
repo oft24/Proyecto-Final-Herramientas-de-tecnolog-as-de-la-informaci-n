@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "4d32636a-8e97-49d9-8614-a9bda1349bbe",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\luisi\\Downloads\\avance2\\Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n\\docs\\archify\\dangoko.architecture.json",
+  "output": "C:\\Users\\luisi\\Downloads\\avance2\\Proyecto-Final-Herramientas-de-tecnolog-as-de-la-informaci-n\\docs\\archify\\dangoko.html",
+  "specification": {
+    "sha256": "b363dfa64990dc96a2591dd33571fed3c6d1fc0a8f25bf02f5370b0484673bc1",
+    "bytes": 4069
+  },
+  "artifact": {
+    "sha256": "013518da20887044e853b0b690ddb93f8e0e6368cba8bd4844de8ebfebf9d89c",
+    "bytes": 755400
+  }
+}

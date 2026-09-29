@@ -4,7 +4,9 @@ La guía principal es [ENTREGA_FINAL.md](ENTREGA_FINAL.md), con cada paso enlaza
 
 ## Arquitectura
 
-![Arquitectura](diagrama_arquitectura.svg)
+![Arquitectura generada con Archify](archify/dangoko.png)
+
+[Diagrama Archify, fuente editable y validación](archify/README.md).
 
 El navegador accede a Flask en EC2. Compose contiene api y notifications. RDS guarda usuarios, pedidos y partidas; S3 guarda recibos privados con AES256. No hay base PostgreSQL local.
 
