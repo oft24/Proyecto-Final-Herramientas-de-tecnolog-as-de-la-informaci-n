@@ -1,3 +1,8 @@
 # Preserve evidence bytes and original whitespace across Windows/Linux clones.
 reportes/** -text -whitespace
-docs/capturas/** -text
+docs/capturas/*.png -text
+reportes/bandit.json text eol=lf
+reportes/pip_audit.json text eol=lf
+reportes/sbom_cyclonedx.json text eol=lf
+reportes/pipeline_bloqueado_local.txt text eol=lf
+reportes/pipeline_verde_local.txt text eol=lf
