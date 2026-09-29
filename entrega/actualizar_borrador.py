@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from docx import Document
+from docx.shared import Pt
 
 
 WORD = Path(__file__).with_name("Evidencias_EntregaFinal_en_progreso.docx")
@@ -38,13 +39,16 @@ def main(sha: str) -> None:
         43: "No borré ni alteré pedidos reales para demostrarla: las pruebas locales usaron dobles de RDS y notificaciones. La contención no reemplaza el arreglo de autorización.",
         45: "Exigí sesión y comparación de orders.user_id con el usuario antes de notificar. Un pedido ajeno devuelve 404 sin evento, y una petición anónima devuelve 401; el propietario conserva el reenvío.",
         46: "Persistí el código público del pedido en RDS y tomé el correo de la cuenta autenticada. Probé casos propios, ajenos, anónimos y fallas; el pipeline local permitió la versión corregida. Falta validarla en QA.",
-        50: "Lo más difícil fue relacionar el código BDK visible con la fila real de RDS: antes no se persistía ese código, por lo que el parche no podía buscar el pedido de forma confiable.",
-        51: "Añadí una columna y migración idempotente, y construí una prueba con dos usuarios. También comprobé que Bandit no detectaba la falta de autorización: era necesario probar el comportamiento, no solo escanear el código.",
-        53: "Primero aislaría el endpoint y revisaría logs para saber qué pedidos y usuarios se afectaron; luego comunicaría el incidente según su alcance. No intentaría llamarlo resuelto solo porque el endpoint responde 202.",
-        54: "Desplegaría la corrección con pruebas de propiedad y monitoreo de reenvíos. Además, configuraría un transporte de correo verificable o dejaría explícito que solo se registró un evento.",
+        50: "Lo más difícil fue unir el código BDK de la interfaz con la fila en RDS: antes no se guardaba y el parche no podía localizar el pedido.",
+        51: "Persistí el código con una migración idempotente y probé acceso con dos usuarios. Bandit no detectó esta falla de negocio; la prueba funcional sí.",
+        53: "Aislaría la ruta, revisaría logs para medir el alcance y avisaría a los afectados. No asumiría éxito solo porque la API devuelva 202.",
+        54: "Desplegaría con pruebas de propiedad, monitoreo y correo verificable; sin SMTP indicaría que solo se registró un evento.",
     }
     for index, value in answers.items():
         replace_text(document.paragraphs[index], value)
+        document.paragraphs[index].paragraph_format.space_after = Pt(6)
+    # Evita dejar la última pregunta sola al pie de la página anterior.
+    document.paragraphs[52].paragraph_format.keep_with_next = True
 
     replace_text(document.tables[0].cell(4, 1).paragraphs[0], f"{REPO} (remediación {sha})")
     steps = document.tables[9]

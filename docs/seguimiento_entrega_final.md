@@ -8,7 +8,7 @@ Los resultados locales demuestran la falla y su corrección, pero **no sustituye
 | 2. Pipeline que bloquea | `reportes/pipeline_bloqueado_local.txt`: exit 1, dos pruebas de autorización fallan, `BLOQUEADO`. | Repetir en QA, guardar stdout/stderr/exit y captura legible. |
 | 3. Clasificación | `docs/clasificacion_hallazgo.md`: CWE-639, severidad media, impacto, reproducción y falso positivo descartado localmente. | Correlacionar con salida QA. |
 | 4. Contención y prevención | `docs/respuesta_incidente.md`: la revisión vulnerable no se ejecutó como servicio público; corrección de sesión/propiedad y pruebas locales. | Confirmar contención y resultado en QA. |
-| 5. Remediación | Código corregido y tests locales del propietario/ajeno/anónimo/errores; commit final pendiente. | Registrar SHA remediado y validar extremo a extremo en QA. |
+| 5. Remediación | Commit `56b06f5`: código corregido y pruebas locales del propietario/ajeno/anónimo/errores. | Validar extremo a extremo en QA. |
 | 6. Pipeline que permite | Corrida final local: exit 0, `PERMITIDO`; 37 pruebas pasan, Bandit sin HIGH, pip-audit sin avisos y SBOM CycloneDX con 10 componentes. `reportes/pipeline_verde_local.txt` conserva el veredicto local. | Repetir en QA sobre el mismo SHA que vaya a Producción. |
 | 7. Nueva EC2 Producción | `docs/evidencia_produccion.md` es plantilla pendiente, **no evidencia**. | Solo tras QA verde: crear EC2 nueva, desplegar, probar, tomar capturas. |
 
