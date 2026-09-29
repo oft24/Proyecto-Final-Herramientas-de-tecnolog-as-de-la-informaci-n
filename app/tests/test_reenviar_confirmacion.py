@@ -103,6 +103,47 @@ class ResendAuthorizationTests(unittest.TestCase):
 
 
 class NotificationServiceTests(unittest.TestCase):
+    def test_health_checks_storage_without_adding_events(self):
+        from notifications_service import app as notification_app
+
+        with tempfile.TemporaryDirectory() as directory:
+            log_path = Path(directory) / "volume" / "events.jsonl"
+            with patch("notifications_service.LOG_PATH", log_path):
+                response = notification_app.test_client().get("/salud")
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.get_json()["log_ready"])
+                self.assertEqual(log_path.read_text(encoding="utf-8"), "")
+                log_path.write_text('{"event":"existing"}\n', encoding="utf-8")
+                notification_app.test_client().get("/salud")
+                self.assertEqual(log_path.read_text(encoding="utf-8"), '{"event":"existing"}\n')
+
+    def test_health_fails_when_volume_is_not_writable(self):
+        from notifications_service import app as notification_app
+
+        with tempfile.TemporaryDirectory() as directory:
+            log_path = Path(directory) / "events.jsonl"
+            with patch("notifications_service.LOG_PATH", log_path), patch.object(
+                Path, "open", side_effect=PermissionError("read-only volume")
+            ):
+                response = notification_app.test_client().get("/salud")
+            self.assertEqual(response.status_code, 503)
+            self.assertFalse(response.get_json()["log_ready"])
+
+    def test_notification_is_not_accepted_when_log_write_fails(self):
+        from notifications_service import app as notification_app
+
+        with tempfile.TemporaryDirectory() as directory:
+            log_path = Path(directory) / "events.jsonl"
+            with patch("notifications_service.LOG_PATH", log_path), patch.object(
+                Path, "open", side_effect=PermissionError("read-only volume")
+            ), patch.dict(os.environ, {"SMTP_HOST": ""}):
+                for route in ("/notifications/order", "/notifications/order/resend"):
+                    response = notification_app.test_client().post(
+                        route, json={"order_id": ORDER_CODE, "email": ORDER["customer_email"]}
+                    )
+                    self.assertEqual(response.status_code, 503)
+                    self.assertNotIn("delivery", response.get_json())
+
     def test_resend_is_logged_without_claiming_email_delivery(self):
         from notifications_service import app as notification_app
 

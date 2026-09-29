@@ -1,5 +1,6 @@
 services:
   api:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,6 +23,7 @@ services:
       retries: 5
 
   notifications:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: Dockerfile

@@ -18,7 +18,15 @@ LOG_PATH = Path(os.getenv("NOTIFICATION_LOG_PATH", "/tmp/dangoko-notifications.j
 
 @app.get("/salud")
 def health():
-    return jsonify(status="ok", service="notifications")
+    try:
+        LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        # Open the actual file without writing an event. A live process is not
+        # ready if its mounted volume (or an existing log) is not writable.
+        with LOG_PATH.open("a", encoding="utf-8"):
+            pass
+    except OSError:
+        return jsonify(status="unavailable", service="notifications", log_ready=False), 503
+    return jsonify(status="ok", service="notifications", log_ready=True)
 
 
 @app.post("/notifications/order")
@@ -52,9 +60,12 @@ def _record_order_event(event_name: str):
         "delivery": delivery,
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
-    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with LOG_PATH.open("a", encoding="utf-8") as stream:
-        stream.write(json.dumps(event, ensure_ascii=False) + "\n")
+    try:
+        LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with LOG_PATH.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(event, ensure_ascii=False) + "\n")
+    except OSError:
+        return jsonify(error="No se pudo registrar la notificación."), 503
     return jsonify(status=delivery, delivery=delivery, event=event), 202
 
 

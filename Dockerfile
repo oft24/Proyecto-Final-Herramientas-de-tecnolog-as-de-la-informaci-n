@@ -11,7 +11,8 @@ COPY app/requirements.txt /opt/dangoko/app/requirements.txt
 RUN python -m pip install --no-cache-dir -r /opt/dangoko/app/requirements.txt
 COPY app /opt/dangoko/app
 
-RUN chown -R appuser:appuser /opt/dangoko
+RUN mkdir -p /var/lib/dangoko \
+    && chown -R appuser:appuser /opt/dangoko /var/lib/dangoko
 USER appuser
 WORKDIR /opt/dangoko/app
 
